@@ -1,0 +1,31 @@
+# Environment and secrets
+.env
+.env.local
+
+# Runtime databases & vector store indexes (prevents personal vault leakage)
+data/
+chroma_db/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
