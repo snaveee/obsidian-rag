@@ -16,27 +16,27 @@ Combines sparse **BM25 text search** (SQLite FTS5) with **dense semantic embeddi
 ```mermaid
 flowchart TD
     subgraph Ingestion ["1. Vault Ingestion & Parsing"]
-        V[Obsidian Vault .md Files] --> L[vault_loader: SHA-256 + path escape guard]
-        L --> P[markdown_parser: frontmatter, #tags, [[wikilinks]]]
-        P --> C[chunking: heading-aware sliding window + breadcrumbs]
-        P --> R[(note_registry SQLite: notes + 1-hop graph)]
+        V["Obsidian Vault .md Files"] --> L["vault_loader: SHA-256 + path escape guard"]
+        L --> P["markdown_parser: frontmatter, #tags, wikilinks"]
+        P --> C["chunking: heading-aware sliding window + breadcrumbs"]
+        P --> R[("note_registry SQLite: notes + 1-hop graph")]
     end
 
     subgraph Storage ["2. Dual Indexing Layer"]
-        C --> E[embeddings: Ollama nomic-embed-text]
-        E --> VS[(ChromaDB Dense Vectors)]
-        C --> FTS[(SQLite FTS5 BM25 Sparse Index)]
+        C --> E["embeddings: Ollama nomic-embed-text"]
+        E --> VS[("ChromaDB Dense Vectors")]
+        C --> FTS[("SQLite FTS5 BM25 Sparse Index")]
     end
 
     subgraph Retrieval ["3. Multi-Stage Retrieval & Generation"]
-        Q[User Query] --> H[Hybrid Search Engine]
+        Q["User Query"] --> H["Hybrid Search Engine"]
         VS --> H
         FTS --> H
-        H --> RRF[Reciprocal Rank Fusion - RRF k=60]
-        RRF --> CE[BAAI/bge-reranker-base Cross-Encoder]
-        CE --> GEN[Grounded Answer Generator]
-        GEN --> UI[Streamlit Interactive Dashboard]
-        GEN --> HIST[(SQLite Search History & Deduplication)]
+        H --> RRF["Reciprocal Rank Fusion - RRF (k=60)"]
+        RRF --> CE["BAAI/bge-reranker-base Cross-Encoder"]
+        CE --> GEN["Grounded Answer Generator"]
+        GEN --> UI["Streamlit Interactive Dashboard"]
+        GEN --> HIST[("SQLite Search History & Deduplication")]
     end
 ```
 
